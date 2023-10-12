@@ -80,7 +80,7 @@ Please note that large downloads (>100 sequences) must be performed between on w
 
 # Curate database
 
-There are two broad approaches for making databases for classifying sequences, one is to use the whole sequences and one is to train the classifier only on the regions targeted by your primers. Here we will build both.
+There are two broad approaches for making databases for classifying sequences, one is to use the whole sequences and one is to train the classifier only on the regions targeted by your primers. Here we will build both and the example below creates the classifier for the rbcl plastid gene. 
 
 The downloaded data will then be dereplicated but keeps identical sequences with unique taxonomic ranks (```--p-mode 'uniq'```), the classifier will handle working out the taxonomic assignment. The classifier will use the lowest common ancestor when it is unable to disambiguate very similar or identical sequences with differing taxonomy.
 
@@ -113,7 +113,7 @@ qiime rescript cull-seqs \
 ```
 
 The sequences and taxonomic files are then trained to create the classifier using a Naive Bayes classifier, which must be trained on the reference sequences and their taxonomic classification. This information can either consist of the entire gene sequence or the exact region your primers targeted on that genes targeted which requires your primer sequences. See this page for more information https://docs.qiime2.org/2023.7/tutorials/feature-classifier/ 
-For now we will use the whole database. The example below creates the classifier for the rbcl plastid gene. 
+For now we will use the whole database. 
 
 ```
 ###############  evaluate and train classifier #############
