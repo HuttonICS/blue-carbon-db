@@ -52,7 +52,7 @@ Michael S Robeson II, Devon R O'Rourke, Benjamin D Kaehler, Michal Ziemski, Matt
 
 # Get sequences
 
-The first stage in the database generation is to download the desired sequences NCBI's Genbank. This is performed with RESCRIPts function get-ncbi-data:
+The first stage in the database generation is to download the desired sequences NCBI's Genbank. This is performed with RESCRIPts function ```get-ncbi-data```:
 
 ```
 source activate qiime2-2023.7
@@ -82,7 +82,7 @@ Please note that large downloads (>100 sequences) must be performed between on w
 
 There are two broad approaches for making databases for classifying sequences, one is to use the whole sequences and one is to train the classifier only on the regions targeted by your primers. Here we will build both.
 
-The downloaded data will then be dereplicated but keeps identical sequences with unique taxonomic ranks (--p-mode 'uniq'), the classifier will handle working out the taxonomic assignment. The classifier will use the lowest common ancestor when it is unable to disambiguate very similar or identical sequences with differing taxonomy.
+The downloaded data will then be dereplicated but keeps identical sequences with unique taxonomic ranks (```--p-mode 'uniq'```), the classifier will handle working out the taxonomic assignment. The classifier will use the lowest common ancestor when it is unable to disambiguate very similar or identical sequences with differing taxonomy.
 
 
 ```
@@ -99,7 +99,7 @@ qiime rescript dereplicate \
 --o-dereplicated-taxa rbcl/basic-rbcl-ref-tax-derep.qza 
 ```
 
-Then ambiguous sequences are remove sequences that contain ambiguous bases that can occur IUPAC compliant ambiguity bases) (--p-num-degenerates 1) and any homopolymers that are 8 or more bases in length (--p-homopolymer-length 8).
+Then ambiguous sequences are remove sequences that contain ambiguous bases that can occur (IUPAC compliant ambiguity bases) (```--p-num-degenerates 1```) and any homopolymers that are 8 or more bases in length (```--p-homopolymer-length 8```).
 
 ```
 ######### remove sequences with ambiguous basepairs ##################  
