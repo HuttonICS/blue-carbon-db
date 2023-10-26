@@ -161,4 +161,4 @@ qiime rescript evaluate-taxonomy \
 
 ```
 
-These ``` .qza ``` files can be viewed by going to https://view.qiime2.org/ and placing the file into the viewer. 
+These ``` .qzv ``` files can be viewed by going to https://view.qiime2.org/ and placing the file into the viewer. 
