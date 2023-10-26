@@ -112,6 +112,34 @@ qiime rescript cull-seqs \
 --o-clean-sequences rbcl/basic-rbcl-ref-seqs-derep-cull.qza
 ```
 
+In addition to dereplicating and removing ambiguous sequences, it may be nessasary to correct some taxonomic labels or remove taxa and sequences that are not useful for identifying our data (for example "unassigned" or "Environmental samples"). This can be performed using ```qiime taxa filter-seqs```, ```qiime rescript edit-taxonomy``` and ```qiime rescript filter-taxa```. An example of which is below:
+
+```
+###### edit taxonomic labels #####
+
+qiime rescript edit-taxonomy \
+--i-taxonomy rbcl/basic-rbcl-ref-tax-derep.qza  \
+--p-search-strings 'k__Eukaryota;p__Eukaryota;c__Pelagophyceae' \
+--p-replacement-strings 'k__Eukaryota;p__Ochrophyta;c__Pelagophyceae' \
+--o-edited-taxonomy rbcl/basic-rbcl-ref-tax-derep-fixed.qza 
+
+###### remove uninformative sequences and taxonomies from the database #######
+
+qiime taxa filter-seqs \
+--i-sequences rbcl/basic-rbcl-ref-seqs-derep-cull.qza \
+--i-taxonomy rbcl/basic-rbcl-ref-tax-derep-fixed.qza \
+--p-exclude 'k__Environmental samples','k__Unassigned' \
+--o-filtered-sequences rbcl/basic-rbcl-ref-seqs-derep-cull-filtered.qza
+
+qiime rescript filter-taxa \
+--i-taxonomy rbcl/basic-rbcl-ref-tax-derep-fixed.qza \
+--m-ids-to-keep-file rbcl/basic-rbcl-ref-seqs-derep-cull-filtered.qza \
+--o-filtered-taxonomy rbcl/basic-rbcl-ref-tax-derep-fixed-filtered.qza
+
+```
+
+# Classifier
+
 The sequences and taxonomic files are then trained to create the classifier using a Naive Bayes classifier, which must be trained on the reference sequences and their taxonomic classification. This information can either consist of the entire gene sequence or the exact region your primers targeted on that genes targeted which requires your primer sequences. See this page for more information https://docs.qiime2.org/2023.7/tutorials/feature-classifier/ 
 For now we will use the whole database. 
 
@@ -119,12 +147,18 @@ For now we will use the whole database.
 ###############  evaluate and train classifier #############
 
 qiime rescript evaluate-fit-classifier \
---i-sequences rbcl/basic-rbcl-ref-seqs-derep-cull.qza \
---i-taxonomy rbcl/basic-rbcl-ref-tax-derep.qza \
+--i-sequences rbcl/basic-rbcl-ref-seqs-derep-cull-filtered.qza  \
+--i-taxonomy rbcl/basic-rbcl-ref-tax-derep-fixed-filtered.qza \
 --p-n-jobs 2 \
 --o-classifier rbcl/ncbi-rbcl-basic-refseqs-classifier.qza \
 --o-evaluation rbcl/ncbi-rbcl-basic-refseqs-classifier-evaluation.qzv \
 --o-observed-taxonomy rbcl/ncbi-rbcl-basic-refseqs-predicted-taxonomy.qza
 
+qiime rescript evaluate-taxonomy \
+--i-taxonomies rbcl/basic-rbcl-ref-tax-derep-fixed-filtered.qza rbcl/ncbi-rbcl-basic-refseqs-predicted-taxonomy.qza \
+--p-labels ref-taxonomy predicted-taxonomy \
+--o-taxonomy-stats rbcl/basic-rbcl-taxonomy-evaluation.qzv
+
 ```
 
+These ``` .qza ``` files can be viewed by going to https://view.qiime2.org/ and placing the file into the viewer. 
